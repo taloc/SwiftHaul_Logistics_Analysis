@@ -10,8 +10,8 @@ https://www.udacity.com/course/bigquery-for-data-analysts--cd15852
 - Explain how BigQuery secures data through encryption and IAM access control.
 
 To complete this final project submission I used BigQuery to ingest data from 2 csv files.
-shipments.csv.gz — the core shipments dataset (~39 MB gzipped)
-carrier_rates.csv — the carrier rate card
+- shipments.csv.gz — the core shipments dataset (~39 MB gzipped)
+- carrier_rates.csv — the carrier rate card
 
 # Scenario analysis narrative
 You are a data analyst at SwiftHaul Logistics, a freight and last-mile delivery company. The operations team has just moved its shipment records to Google Cloud and needs a working analytics environment in BigQuery. Your job is to stand it up end to end: load and combine the data, model it into reusable views, make it fast and cost-efficient at scale, understand how it is secured and governed, and answer the questions leadership cares about — on-time performance, cost per lane, and carrier performance.
@@ -24,4 +24,4 @@ _See image of Google Cloud console Big Query:_
 ![Google Cloud console](https://raw.githubusercontent.com/taloc/SwiftHaul_Logistics_Analysis/refs/heads/main/Google%20Cloud%20console.png?raw=true)
 
 # This project is licensed under the MIT License.
-See LICENSE .
+See [LICENSE](https://github.com/taloc/SwiftHaul_Logistics_Analysis/blob/main/LICENSE).
