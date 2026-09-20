@@ -21,7 +21,7 @@ A working web browser with access to a google account for Google Cloud console u
 Udacity subscribed students are provided with a Google Cloud sandbox, otherwise own billing is applicable.
 
 _See image of Google Cloud console Big Query:_
-
+[Google Cloud console](https://raw.githubusercontent.com/taloc/SwiftHaul_Logistics_Analysis/refs/heads/main/Google%20Cloud%20console.png)
 
 # This project is licensed under the MIT License.
 See LICENSE .
