@@ -1,0 +1,6 @@
+-- Create an external table as carrier_rates from google storage
+CREATE OR REPLACE EXTERNAL TABLE `lab16499377-1788299418.swifthaul.carrier_rates`
+OPTIONS (
+    format = 'CSV',
+    skip_leading_rows = 1,
+    uris = ['gs://swifthaul_ry/carrier_rates.csv']);
