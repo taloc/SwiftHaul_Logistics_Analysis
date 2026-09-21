@@ -1,0 +1,13 @@
+# Dataset is created as swifthaul and localized in the US
+CREATE SCHEMA IF NOT EXISTS `lab16499377-1788299418.swifthaul`
+OPTIONS (
+  location = 'US',
+  description = 'SwiftHaul logistics analysis'
+);
+
+-- Create a native table as shipments and load the shipments.csv
+LOAD DATA INTO `lab16499377-1788299418.swifthaul.shipments`
+FROM FILES (
+    format = 'CSV',
+    skip_leading_rows = 1,
+    uris = ['gs://<BUCKET>/rides.csv']);
