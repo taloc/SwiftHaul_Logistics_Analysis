@@ -10,4 +10,4 @@ LOAD DATA INTO `lab16499377-1788299418.swifthaul.shipments`
 FROM FILES (
     format = 'CSV',
     skip_leading_rows = 1,
-    uris = ['gs://<BUCKET>/rides.csv']);
+    uris = ['gs://swifthaul_ry/shipments.csv']);
