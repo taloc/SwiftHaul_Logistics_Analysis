@@ -1,0 +1,17 @@
+-- Create a view for on-time rate by carrier and month (on-time shipments / total shipments) 35.29 MB when run.
+
+SELECT
+    carrier,
+    DATE_TRUNC(ship_date, MONTH) AS ship_month,
+    COUNT(*) AS total_shipments,
+    COUNTIF(on_time = TRUE) AS on_time_shipments,
+    ROUND(
+        100 * COUNTIF(on_time = TRUE) / COUNT(*),
+        2
+    ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.shipments`
+WHERE ship_date IS NOT NULL
+GROUP BY
+    ship_month,
+    carrier
+    ;
