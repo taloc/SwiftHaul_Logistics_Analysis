@@ -1,5 +1,6 @@
 -- Create a view for on-time rate by carrier and month (on-time shipments / total shipments) 35.29 MB when run.
 
+CREATE OR REPLACE VIEW `lab16499377-1788299418.swifthaul.on_time_by_carrier_month` AS
 SELECT
     carrier,
     DATE_TRUNC(ship_date, MONTH) AS ship_month,
@@ -14,4 +15,7 @@ WHERE ship_date IS NOT NULL
 GROUP BY
     ship_month,
     carrier
+ORDER BY 
+    carrier,
+    ship_month
     ;
