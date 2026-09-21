@@ -4,3 +4,22 @@ OPTIONS (
     format = 'CSV',
     skip_leading_rows = 1,
     uris = ['gs://swifthaul_ry/carrier_rates.csv']);
+
+-- This query joins the shipments table to the carrier_rate table, but it is not optimized.
+SELECT  *
+FROM `lab16499377-1788299418.swifthaul.shipments` AS s
+JOIN `lab16499377-1788299418.swifthaul.carrier_rates` AS c
+ON s.carrier = c.carrier;
+
+/*
+This query can be used to estimate the compute consumption of running the carrier_rates table (0.0 MB).
+SELECT *    
+FROM `lab16499377-1788299418.swifthaul.carrier_rates`;
+*/
+
+/*
+This query can be used to estimate the compute consumption of running the shipments table without any optimization (189.03 MB).
+SELECT  *
+FROM `lab16499377-1788299418.swifthaul.shipments`
+LIMIT 1;
+*/
