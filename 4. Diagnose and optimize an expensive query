@@ -1,0 +1,72 @@
+-- Unoptimized query takes 189.03 MB when run.
+SELECT
+    *
+FROM `lab16499377-1788299418.swifthaul.shipments`;
+
+-- Optimized query used for getting average freight cost per lane of delayed shipments processes in 35.29MB
+SELECT
+    carrier,
+    DATE_TRUNC(ship_date, MONTH) AS ship_month,
+    COUNT(*) AS total_shipments,
+    COUNTIF(on_time = TRUE) AS on_time_shipments,
+    ROUND(
+        100 * COUNTIF(on_time = TRUE) / COUNT(*),
+        2
+    ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.shipments`
+WHERE ship_date IS NOT NULL
+GROUP BY
+    ship_month,
+    carrier
+ORDER BY 
+    carrier,
+    ship_month
+    ;
+
+-- Creating optimized shipments table with partition over ship_date and cluster by carrier and destination region
+CREATE OR REPLACE TABLE `lab16499377-1788299418.swifthaul.optimized_shipments`
+  PARTITION BY ship_date
+  CLUSTER BY carrier, destination_region AS
+    SELECT
+      *
+    FROM `lab16499377-1788299418.swifthaul.shipments`;
+
+-- Running the same filtered query but in an optimized table will process in 35.29 MB
+SELECT
+    carrier,
+    DATE_TRUNC(ship_date, MONTH) AS ship_month,
+    COUNT(*) AS total_shipments,
+    COUNTIF(on_time = TRUE) AS on_time_shipments,
+    ROUND(
+        100 * COUNTIF(on_time = TRUE) / COUNT(*),
+        2
+    ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.shipments`
+WHERE ship_date IS NOT NULL
+GROUP BY
+    ship_month,
+    carrier
+ORDER BY 
+    carrier,
+    ship_month
+    ;
+
+-- Running the same filtered query but in an optimized table will process in 35.29MB
+SELECT
+    carrier,
+    DATE_TRUNC(ship_date, MONTH) AS ship_month,
+    COUNT(*) AS total_shipments,
+    COUNTIF(on_time = TRUE) AS on_time_shipments,
+    ROUND(
+        100 * COUNTIF(on_time = TRUE) / COUNT(*),
+        2
+    ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+WHERE ship_date IS NOT NULL
+GROUP BY
+    ship_month,
+    carrier
+ORDER BY 
+    carrier,
+    ship_month
+    ;
