@@ -1,0 +1,11 @@
+Data governance and access for this project
+
+SwiftHaul relies on Google’s data governance for encryption of at rest and during transit, 
+ensuring that our data is secured from end-to-end before the data is stored, and while we operate 
+BigQuery for internal and external transmission of data through the internet. 
+
+For this current exercise we have IAM full access control at all levels of project, dataset, tables, 
+and views. Permissions could be customized for limited access as needed.
+
+External source: Google's Data Governance in BigQuery
+https://docs.cloud.google.com/bigquery/docs/data-governance
