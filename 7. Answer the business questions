@@ -1,0 +1,23 @@
+/* Required to 3 business questions and the SQL queries used.
+Which carriers are the most and least reliable (on-time rate)?
+Which lanes are the most expensive on average?
+How do carriers compare on cost vs. reliability — and what would you recommend?
+*/
+
+-- Which carriers are the most and least reliable (on-time rate), using optimized table?
+SELECT
+    carrier,
+    COUNT(*) AS total_shipments,
+    COUNTIF(on_time = TRUE) AS on_time_shipments,
+    ROUND(
+        100 * COUNTIF(on_time = TRUE) / COUNT(*),
+        2
+    ) AS on_time_rate_pct,
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+WHERE ship_date IS NOT NULL
+GROUP BY
+    carrier
+ORDER BY 
+    4 DESC
+    ;
+
