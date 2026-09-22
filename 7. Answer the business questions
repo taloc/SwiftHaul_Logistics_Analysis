@@ -2,9 +2,10 @@
 Which carriers are the most and least reliable (on-time rate)?
 Which lanes are the most expensive on average?
 How do carriers compare on cost vs. reliability — and what would you recommend?
+The queries below will use the optimized shipments table
 */
 
--- Which carriers are the most and least reliable (on-time rate), using optimized table?
+-- Which carriers are the most and least reliable (on-time rate)?
 SELECT
     carrier,
     COUNT(*) AS total_shipments,
@@ -21,3 +22,38 @@ ORDER BY
     4 DESC
     ;
 
+-- Which lanes are the most expensive on average?
+SELECT 
+  origin_region AS origin,
+  destination_region AS destination,
+  CONCAT (origin_region, ' -> ', destination_region) AS lane,
+  ROUND (AVG (freight_cost_usd), 2) AS average_cost,
+  COUNT (*) AS shipments_per_lane
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  GROUP BY
+    origin_region,
+    destination_region
+  ORDER BY average_cost DESC;
+
+-- How do carriers compare on cost vs. reliability — and what would you recommend?
+SELECT 
+  origin_region AS origin,
+  destination_region AS destination,
+  CONCAT (origin_region, ' -> ', destination_region) AS lane,
+  ROUND (AVG (freight_cost_usd), 2) AS average_cost,
+  COUNT (*) AS shipments_per_lane,
+  carrier,
+  COUNT(*) AS total_shipments,
+  COUNTIF(on_time = TRUE) AS on_time_shipments,
+  ROUND(
+      100 * COUNTIF(on_time = TRUE) / COUNT(*),
+      2
+      ) AS on_time_rate_pct,
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  GROUP BY
+    carrier,
+    origin_region,
+    destination_region
+ORDER BY 
+  average_cost,
+  on_time_rate_pct DESC;
