@@ -35,7 +35,27 @@ FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
     destination_region
   ORDER BY average_cost DESC;
 
--- How do carriers compare on cost vs. reliability — and what would you recommend?
+/* The following queries will aim to get the best carrier options by cost and reliability
+To complete this we follow 2 steps:
+1) Find the 3 busiest lanes (This is where the most savings can be realized)
+2) Find the 3 lowest average cost of the busiest lanes of carriers with a 90%+ reliability
+*/
+
+-- Finding the top 3 busiest lanes
+SELECT 
+  origin_region AS origin,
+  destination_region AS destination,
+  CONCAT (origin_region, ' -> ', destination_region) AS lane,
+  COUNT (*) AS shipments_per_lane,
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  GROUP BY
+    origin_region,
+    destination_region
+ORDER BY 
+  shipments_per_lane DESC
+  LIMIT 3;
+
+-- Query to discover top on-time carriers (90%+) for lane EU-Central -> APAC-South 
 SELECT 
   origin_region AS origin,
   destination_region AS destination,
@@ -48,12 +68,69 @@ SELECT
   ROUND(
       100 * COUNTIF(on_time = TRUE) / COUNT(*),
       2
-      ) AS on_time_rate_pct,
+      ) AS on_time_rate_pct
 FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  WHERE origin_region = 'EU-Central'
+  AND destination_region = 'APAC-South'
   GROUP BY
     carrier,
     origin_region,
     destination_region
+  HAVING ROUND(100 * COUNTIF(on_time = TRUE) / COUNT(*), 2) > 90
 ORDER BY 
-  average_cost,
+  average_cost ASC,
   on_time_rate_pct DESC;
+
+-- Query to discover top on-time carriers (90%+) for lane EU-West -> APAC-East
+SELECT 
+  origin_region AS origin,
+  destination_region AS destination,
+  CONCAT (origin_region, ' -> ', destination_region) AS lane,
+  ROUND (AVG (freight_cost_usd), 2) AS average_cost,
+  COUNT (*) AS shipments_per_lane,
+  carrier,
+  COUNT(*) AS total_shipments,
+  COUNTIF(on_time = TRUE) AS on_time_shipments,
+  ROUND(
+      100 * COUNTIF(on_time = TRUE) / COUNT(*),
+      2
+      ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  WHERE origin_region = 'EU-West'
+  AND destination_region = 'APAC-East'
+  GROUP BY
+    carrier,
+    origin_region,
+    destination_region
+  HAVING ROUND(100 * COUNTIF(on_time = TRUE) / COUNT(*), 2) > 90
+ORDER BY 
+  average_cost ASC,
+  on_time_rate_pct DESC;
+
+-- Query to discover top on-time carriers (90%+) for lane EU-West -> EU-Central
+  SELECT 
+  origin_region AS origin,
+  destination_region AS destination,
+  CONCAT (origin_region, ' -> ', destination_region) AS lane,
+  ROUND (AVG (freight_cost_usd), 2) AS average_cost,
+  COUNT (*) AS shipments_per_lane,
+  carrier,
+  COUNT(*) AS total_shipments,
+  COUNTIF(on_time = TRUE) AS on_time_shipments,
+  ROUND(
+      100 * COUNTIF(on_time = TRUE) / COUNT(*),
+      2
+      ) AS on_time_rate_pct
+FROM `lab16499377-1788299418.swifthaul.optimized_shipments`
+  WHERE origin_region = 'EU-West'
+  AND destination_region = 'EU-Central'
+  GROUP BY
+    carrier,
+    origin_region,
+    destination_region
+  HAVING ROUND(100 * COUNTIF(on_time = TRUE) / COUNT(*), 2) > 90
+ORDER BY 
+  average_cost ASC,
+  on_time_rate_pct DESC;
+
+--
